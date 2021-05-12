@@ -32,24 +32,67 @@ def display_baralho(baralho):
             cor = colorama.Fore.YELLOW
         print(f'{i}. {cor + carta + colorama.Fore.RESET}')
 
-naipe = []
-valor =[]
-for i in range(0,len(baralho)):
-    extrai_naipe = baralho[i][-1]
-    naipe.append(extrai_naipe)
+# FUNÇÃO QUE EXTRAI NAIPE
+def extrai_naipe(cartas):
+    return cartas[-1]
 
-    
-    if len(baralho[i]) > 2:
-        valor_extraido = baralho[i][0] + baralho[i][1]
-        valor.append(valor_extraido)
-    else:
-        valor_extraido = baralho[i][0]
-        valor.append(valor_extraido)
-print (valor)
-print(naipe)
+# FUNÇÃO QUE EXTRAI VALOR
 
-escolha = int(input('Escolha uma carta(1-52): '))
-for carta in dic.keys():
-    if escolha == carta:
-        a = dic[carta]
-        print(a)
+def extrai_valor(valor):
+    return valor[:-1:]
+
+# FUNÇÃO MOSTRA MOVIMENTOS POSSIVEIS
+
+def lista_movimentos_possiveis(baralho,indice):
+    if indice == 0:
+        return []
+    resposta =[]
+
+    carta = baralho[indice]
+    naipe_carta = extrai_naipe(carta)
+    valor_carta = extrai_valor(carta)
+
+    if indice >= 1:
+        carta1 = baralho[indice-1]
+        naipe_carta1 = extrai_naipe(carta1)
+        valor_carta1 = extrai_valor(carta1)
+        if naipe_carta1 == naipe_carta or valor_carta1 == valor_carta:
+            resposta.append(1)
+
+            
+    if indice >= 3:
+        carta1 = baralho[indice-3]
+        naipe_carta1 = extrai_naipe(carta1)
+        valor_carta1 = extrai_valor(carta1)
+        if naipe_carta1 == naipe_carta or valor_carta1 == valor_carta:
+            resposta.append(3)
+    return resposta
+
+def possui_movimentos_possiveis(baralho):
+    conta = 0
+    while conta < len(baralho):
+        
+        movimento = lista_movimentos_possiveis(baralho,conta)
+      
+        if len(movimento) > 0:
+            return True
+        conta += 1
+    return False
+
+
+# FUNÇÃO QUE EMPILHA A CARTA
+
+def empilha (baralho,origem, destino):
+
+    carta_origem = baralho.pop(origem)
+    baralho[destino]=carta_origem
+    return baralho
+
+def pergunta_escolha(pergunta,minimo,maximo):
+    resposta = input(pergunta)
+    if not resposta == '':
+        numero = int(resposta)
+        if numero >= minimo and numero <= maximo:
+            return numero
+    print('numero invalido')
+    pergunta_escolha(pergunta,minimo,maximo)

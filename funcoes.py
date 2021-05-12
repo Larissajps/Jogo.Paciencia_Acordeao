@@ -129,3 +129,6 @@ while inicio == 's':
     else:
         print('Você perdeu :(')
         inicio = input('Gostaria de jogar novamente(s ou n): ')
+if inicio == 'n':
+
+    print('OK:(. Nos vemos na próxima! Bye!')

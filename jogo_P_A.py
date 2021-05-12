@@ -8,12 +8,9 @@ colorama.init()
 
 print('Paciência Acordeão \n\n Seja bem-vindo(a) ao jogo de Paciência Acordeão!\n O objetivo deste jogo é colocar todas as cartas em uma mesma pilha.Existem apenas dois movimentos possíveis:\n1. Empilhar uma carta sobre a carta imediatamente anterior;\n2. Empilhar uma carta sobre a terceira carta anterior. \n\n Para que um movimento possa ser realizado basta que uma das duas condições abaixo seja atendida:\n1. As duas cartas possuem o mesmo valor ou \n2. As duas cartas possuem o mesmo naipe. \nDesde que alguma das condições acima seja satisfeita, qualquer carta pode ser movimentada.')
 
-
-
+# função de embaralhar cartas
 def cria_baralho():
-
     cartas=['A♠','A♥','A♦','A♣','2♠','2♥','2♦','2♣','3♠','3♥','3♦','3♣','4♠','4♥','4♦','4♣','5♠','5♥','5♦','5♣','6♠','6♥','6♦','6♣','7♠','7♥','7♦','7♣','8♠','8♥','8♦','8♣','9♠','9♥','9♦','9♣','10♠','10♥','10♦','10♣','J♠','J♥','J♦','J♣','Q♠','Q♥','Q♦','Q♣','K♠','K♥','K♦','K♣']
-
     random.shuffle(cartas)
     return cartas
 
@@ -43,7 +40,7 @@ def extrai_valor(valor):
 
 # FUNÇÃO MOSTRA MOVIMENTOS POSSIVEIS
 
-def lista_movimentos_possiveis(baralho,indice):
+def lista_movimentos_possiveis(baralho,indice): # Verificação se a carta escolhida pode ser ou não pilhada 
     if indice == 0:
         return []
     resposta =[]
@@ -68,7 +65,7 @@ def lista_movimentos_possiveis(baralho,indice):
             resposta.append(3)
     return resposta
 
-def possui_movimentos_possiveis(baralho):
+def possui_movimentos_possiveis(baralho): # Verificação em geral (baralho todo), se existe algum movimento possivel
     conta = 0
     while conta < len(baralho):
         
@@ -79,14 +76,14 @@ def possui_movimentos_possiveis(baralho):
         conta += 1
     return False
 
-
 # FUNÇÃO QUE EMPILHA A CARTA
-
 def empilha (baralho,origem, destino):
 
     carta_origem = baralho.pop(origem)
     baralho[destino]=carta_origem
     return baralho
+
+# função de verificação se o numero é valido ou não
 
 def pergunta_escolha(pergunta,minimo,maximo):
     resposta = input(pergunta)
@@ -101,6 +98,7 @@ baralho = cria_baralho()
 
 inicio = input('Deseja jogar?(s ou n) ')
 
+# Inicio do loop do jogo.
 while inicio == 's':
     baralho = cria_baralho()
     while possui_movimentos_possiveis(baralho) == True:
@@ -111,7 +109,8 @@ while inicio == 's':
         escolha = pergunta_escolha(f'Escolha uma carta de 1 a {len(baralho)}: ',1,len(baralho))-1
 
         movimentos = lista_movimentos_possiveis(baralho, escolha)
-
+# função que da opções de escolha para o empilhamento
+# verificação se a carta escolha tem algum movimento ou não.
         if len(movimentos) == 1:
             empilha(baralho,escolha,escolha - movimentos[0])
         elif len(movimentos) > 1:
@@ -122,7 +121,7 @@ while inicio == 's':
         else:
             print(f'voce nao pode escolher a carta {escolha + 1}, escolha novamente:')
     
-
+# verificação se o jogador ganhou ou perdeu e se ele quer jogar novamente
     if possui_movimentos_possiveis(baralho) == True:
         print('Parabens você ganhou!')
         inicio = input('Gostaria de jogar novamente(s ou n): ')

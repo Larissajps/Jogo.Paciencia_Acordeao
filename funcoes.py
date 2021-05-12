@@ -6,7 +6,7 @@ import random
 import colorama
 colorama.init()
 
-print('Paciência Acordeão \n\n Seja bem-vindo(a) ao jogo de Paciência Acordeão!\n O objetivo deste jogo é colocar todas as cartas em uma mesma pilha.Existem apenas dois movimentos possíveis:\n1. Empilhar uma carta sobre a carta imediatamente anterior;\n2. Empilhar uma carta sobre a terceira carta anterior. \n\n Para que um movimento possa ser realizado basta que uma das duas condições abaixo seja atendida:\n1. As duas cartas possuem o mesmo valor ou \n2. As duas cartas possuem o mesmo naipe. \nDesde que alguma das condições acima seja satisfeita, qualquer carta pode ser movimentada. \nAperte [Enter] para iniciar o jogo...')
+print('Paciência Acordeão \n\n Seja bem-vindo(a) ao jogo de Paciência Acordeão!\n O objetivo deste jogo é colocar todas as cartas em uma mesma pilha.Existem apenas dois movimentos possíveis:\n1. Empilhar uma carta sobre a carta imediatamente anterior;\n2. Empilhar uma carta sobre a terceira carta anterior. \n\n Para que um movimento possa ser realizado basta que uma das duas condições abaixo seja atendida:\n1. As duas cartas possuem o mesmo valor ou \n2. As duas cartas possuem o mesmo naipe. \nDesde que alguma das condições acima seja satisfeita, qualquer carta pode ser movimentada.')
 
 
 
@@ -96,3 +96,36 @@ def pergunta_escolha(pergunta,minimo,maximo):
             return numero
     print('numero invalido')
     pergunta_escolha(pergunta,minimo,maximo)
+
+baralho = cria_baralho()
+
+inicio = input('Deseja jogar?(s ou n) ')
+
+while inicio == 's':
+    baralho = cria_baralho()
+    while possui_movimentos_possiveis(baralho) == True:
+
+        print('situação Atual:')
+
+        display_baralho(baralho)
+        escolha = pergunta_escolha(f'Escolha uma carta de 1 a {len(baralho)}: ',1,len(baralho))-1
+
+        movimentos = lista_movimentos_possiveis(baralho, escolha)
+
+        if len(movimentos) == 1:
+            empilha(baralho,escolha,escolha - movimentos[0])
+        elif len(movimentos) > 1:
+            baralho_movimento = [baralho[escolha - i] for i in movimentos]
+            display_baralho(baralho_movimento)
+            destino = pergunta_escolha('Qual voce gostaria de empilhar: ',1,len(movimentos))-1
+            empilha(baralho,escolha,escolha - movimentos[destino])
+        else:
+            print(f'voce nao pode escolher a carta {escolha + 1}, escolha novamente:')
+    
+
+    if possui_movimentos_possiveis(baralho) == True:
+        print('Parabens você ganhou!')
+        inicio = input('Gostaria de jogar novamente(s ou n): ')
+    else:
+        print('Você perdeu :(')
+        inicio = input('Gostaria de jogar novamente(s ou n): ')
